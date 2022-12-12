@@ -1,0 +1,29 @@
+{% extends 'Blog/main.html' %}
+{% block content %}
+    <h1>You are at the home page</h1>
+    {% if user.is_authenticated %}
+        <a href="/Blog/logout/">Logout</a>
+    
+    {% else %}
+        <a href="/Blog/register/">Register</a>
+        <a href="/Blog/login/">Login</a>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <a href="/Blog/{{ user.username }}">{{ user.username }}</a>
+        <a href="/Blog/create/">Post Blog</a>
+
+    {% endif %}
+
+    <!--The main content.-->
+    <!-- All blogs -->
+    {% if all_blog %}
+        {% for blog in all_blog %}
+        <a href="/Blog/detail/{{blog.id}}/"><h3>{{ blog.title }}</h3></a>
+        <p>{{ blog.body|safe }}</p>
+        <p>{{ blog.created_date_time }}</p>
+        <img src="{{ blog.blog_images.url }}" >
+        {% endfor %}
+    {% endif %}
+
+{% endblock content %}

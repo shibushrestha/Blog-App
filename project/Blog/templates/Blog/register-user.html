@@ -1,0 +1,13 @@
+{% extends 'Blog/main.html' %}
+
+{% block content %}
+
+    <form action="/Blog/register/" method="post" novalidate>
+        {% csrf_token %}
+        {{ form.username.label_tag}} {{ form.username }} <span class="help_text">{{ form.username.help_text }}</span><br><br>
+        {{ form.password1.label_tag}} {{ form.password1 }} {{ form.password1.help_text }}<br>
+        {{ form.password2.label_tag}} {{ form.password2 }} {{ form.password2.help_text }}<br>
+        <input type="submit" value="Register">
+    <form>
+        
+{% endblock content %}

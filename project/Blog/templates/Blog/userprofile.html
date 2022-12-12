@@ -1,0 +1,19 @@
+{% extends 'Blog/main.html' %}
+
+{% block content %}
+    {% if user_profile %}
+        {{ user.username }}
+        {{ user_profile.description }}
+        {{ user_profile.youtube_account }}
+        {{ user_profile.instagram_account }}
+        <p>Followers{{ user_follower }}</p>
+        {% for user_blog in user_all_blog %}
+            <div>
+                <h1>{{ user_blog.title }}</h1>
+                <p>{{ user_blog.body }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock content %}
+
+
