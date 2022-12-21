@@ -3,9 +3,9 @@
 {% block content %}
     {% if blog %}
         <h3>{{ blog.title }}</h3>
-        <p>{{ blog.body }}</p>
+        <div>{{ blog.body|safe }}</div>
         <p>{{ blog.created_date_time }}</p>
-        <img src="{{ blog.blog_images.url }}" width="300px" height="500px">
+        <img src="{{ blog.cover_images.url }}" width="300px" height="500px">
     {% endif %}
 {% endblock content %}
 

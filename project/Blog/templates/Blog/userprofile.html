@@ -10,7 +10,7 @@
         {% for user_blog in user_all_blog %}
             <div>
                 <h1>{{ user_blog.title }}</h1>
-                <p>{{ user_blog.body }}</p>
+                <div>{{ user_blog.body|safe }}</div>
             </div>
         {% endfor %}
     {% endif %}

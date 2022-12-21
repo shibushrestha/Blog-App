@@ -1,10 +1,14 @@
 {% extends 'Blog/main.html' %}
 
 {% block content %}
-
-    <form action="/Blog/create/" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="post">
-    </form>
+    <div style="display: flex; justify-content: center; margin-top:20px">
+        <form action="/Blog/create/" method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form.title }}<br><br>
+            {{ form.cover_images }}<br><br>
+            {{ form.body }}
+            {{ form.media }}<br>
+            <input type="submit" value="post">
+        </form>
+    </div>
 {% endblock content %}

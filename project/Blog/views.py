@@ -68,8 +68,10 @@ def update_user_profile(request):
             return redirect('home')
     return render(request, 'Blog/update_profile.html', {'form':form})
 
+
+@login_required
 def user_profile(request, user_username):
-    user = request.user
+    user = get_object_or_404(User, username = user_username)
     user_profile = get_object_or_404(UserProfile, user=user)
     user_all_blog = user.blog_set.all()
     context ={
@@ -88,9 +90,9 @@ def create_blog(request):
             user = request.user
             title = form.cleaned_data.get('title')
             body = form.cleaned_data.get('body')
-            blog_images = form.cleaned_data.get('blog_images')
+            cover_images = form.cleaned_data.get('cover_images')
             
-            blog = Blog.objects.create(user=user, title=title, body=body, blog_images=blog_images)
+            blog = Blog.objects.create(user=user, title=title, body=body, cover_images=cover_images)
             
             #return redirect('')
 
