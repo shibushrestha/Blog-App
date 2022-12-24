@@ -1,8 +1,8 @@
 {% extends 'Blog/main.html' %}
-
+{% block title %}Register{% endblock title %}
 {% block content %}
 
-    <form action="/Blog/register/" method="post" novalidate>
+    <form action="{% url 'Blog:register' %}" method="post" novalidate>
         {% csrf_token %}
         {{ form.username.label_tag}} {{ form.username }} <span class="help_text">{{ form.username.help_text }}</span><br><br>
         {{ form.password1.label_tag}} {{ form.password1 }} {{ form.password1.help_text }}<br>

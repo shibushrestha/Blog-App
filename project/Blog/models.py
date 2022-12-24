@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from ckeditor.fields import RichTextField
 from django.utils.text import slugify
+from django.urls import reverse
 
 
 class Blog(models.Model):
@@ -31,6 +32,10 @@ class Blog(models.Model):
             return self.cover_images.url
         else:
             return "/static/Blog/images/default_blog_cover_image.webp"
+        
+    def get_absolute_url(self):
+        return reverse("Blog:detail", kwargs={"blog_slug": self.slug})
+    
 
 
 class UserProfile(models.Model):

@@ -1,7 +1,7 @@
 {% extends 'Blog/main.html' %}
-
+{% block title %}Update profile{% endblock title %}
 {% block content %}
-    <form action="/Blog/user.username/profileupdate/" method="post" novalidate>
+    <form action="{% url 'Blog:updateprofile' user.username %} " method="post" novalidate>
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Update">

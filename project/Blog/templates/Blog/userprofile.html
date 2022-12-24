@@ -1,10 +1,10 @@
 {% extends 'Blog/main.html' %}
-
+{% block title %}Profile{% endblock title %}
 {% block content %}
     {% if user_profile %}
         
         <img src="{{ user_profile.get_profile_image_url }}" style="width:100px; height:100px">
-        <a href="/Blog/user.username/profileupdate/">Update profile</a>
+        <a href="{% url 'Blog:updateprofile' user.username %}">Update profile</a>
         {{ user.username }}
         {{ user_profile.description }}
         {{ user_profile.youtube_account }}

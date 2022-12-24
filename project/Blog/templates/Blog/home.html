@@ -1,4 +1,5 @@
 {% extends 'Blog/main.html' %}
+{% block title %}Blog App{% endblock title %}Blog App
 {% block content %}
 
   <h1>You are at the home page</h1>
@@ -7,7 +8,7 @@
     {% if all_blog %}
     <div style="display: flex; justify-content: space-around; flex-direction: column; margin-top:auto 20px; width:900px">
         {% for blog in all_blog %}
-            <a href="/Blog/blog_detail/{{blog.slug}}/"><h3>{{ blog.title }}</h3></a>
+            <a href="{{ blog.get_absolute_url }}"><h3>{{ blog.title }}</h3></a>
             <p>{{ blog.created_date_time }}</p>
             <div>{{ blog.body|safe }}</div>
             <img src="{{ blog.get_cover_image_url }}" width="300px" height="500px" >
