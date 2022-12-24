@@ -25,6 +25,14 @@ class Blog(models.Model):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+    @property
+    def get_cover_image_url(self):
+        if self.cover_images and hasattr(self.cover_images, 'url'):
+            return self.cover_images.url
+        else:
+            return "/static/Blog/images/default_blog_cover_image.webp"
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(to=get_user_model(), on_delete=models.CASCADE)
     description = models.CharField(max_length=500, blank=True, null=True)
@@ -36,3 +44,11 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username + ' Profile'
+
+    @property
+    def get_profile_image_url(self):
+        if self.profile_image and hasattr(self.profile_image, 'url'):
+            return self.profile_image.url
+        else:
+            return "/static/Blog/images/default_profile_image.webp"
+

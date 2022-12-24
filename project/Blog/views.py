@@ -13,6 +13,34 @@ def home(request):
     }
     return render(request, 'Blog/home.html', context)
 
+def blog_detail(request, blog_slug):
+    blog = get_object_or_404(Blog, slug=blog_slug)
+    context = {
+        'blog':blog,
+    }
+    return render(request, 'Blog/detail.html', context)
+
+@login_required
+def create_blog(request):
+    form = CreateBlogForm()
+    if request.method == "POST":
+        form = CreateBlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = request.user
+            title = form.cleaned_data.get('title')
+            body = form.cleaned_data.get('body')
+            cover_images = form.cleaned_data.get('cover_images')
+            
+            blog = Blog.objects.create(user=user, title=title, body=body, cover_images=cover_images)
+            
+            #return redirect('')
+
+    return render(request, 'Blog/create.html', {'form':form})
+
+
+
+
+
 def register_user(request):
     form = UserRegisterForm()
     if request.method == "POST":
@@ -48,7 +76,7 @@ def user_logout(request):
     return redirect('home')
 
 @login_required
-def update_user_profile(request):
+def update_user_profile(request,user_username):
     user = request.user
     userprofile, created = UserProfile.objects.get_or_create(user=user)
 
@@ -83,28 +111,3 @@ def user_profile(request, user_username):
         'user_all_blog':user_all_blog,
         }
     return render(request, 'Blog/userprofile.html', context)
-
-@login_required
-def create_blog(request):
-    form = CreateBlogForm()
-    if request.method == "POST":
-        form = CreateBlogForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = request.user
-            title = form.cleaned_data.get('title')
-            body = form.cleaned_data.get('body')
-            cover_images = form.cleaned_data.get('cover_images')
-            
-            blog = Blog.objects.create(user=user, title=title, body=body, cover_images=cover_images)
-            
-            #return redirect('')
-
-    return render(request, 'Blog/create.html', {'form':form})
-
-
-def blog_detail(request, blog_slug):
-    blog = get_object_or_404(Blog, slug=blog_slug)
-    context = {
-        'blog':blog,
-    }
-    return render(request, 'Blog/detail.html', context)

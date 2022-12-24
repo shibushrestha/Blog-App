@@ -8,8 +8,8 @@ urlpatterns = [
     path('login/', views.user_login, name="login"),
     path('logout/', views.user_logout, name="logout"),
     path('create/', views.create_blog, name="create"),
-    path('<slug:blog_slug>/', views.blog_detail, name='detail'),
+    path('blog_detail/<slug:blog_slug>/', views.blog_detail, name='detail'),
     path('<str:user_username>/', views.user_profile, name="profile"),
-    path('profileupdate/', views.update_user_profile, name="updateprofile")
+    path('<str:user_username>/profileupdate/', views.update_user_profile, name="updateprofile")
     
 ]

@@ -2,6 +2,9 @@
 
 {% block content %}
     {% if user_profile %}
+        
+        <img src="{{ user_profile.get_profile_image_url }}" style="width:100px; height:100px">
+        <a href="/Blog/user.username/profileupdate/">Update profile</a>
         {{ user.username }}
         {{ user_profile.description }}
         {{ user_profile.youtube_account }}
@@ -10,7 +13,7 @@
         {% for user_blog in user_all_blog %}
             <div>
                 <h1>{{ user_blog.title }}</h1>
-                <div>{{ user_blog.body|safe }}</div>
+                <div>{{ user_blog.body| safe | truncatewords:50}}</div>
             </div>
         {% endfor %}
     {% endif %}

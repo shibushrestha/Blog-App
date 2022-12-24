@@ -5,11 +5,12 @@ from .models import Blog, UserProfile
 
 
 class CreateBlogForm(forms.ModelForm):
+    
     class Meta():
         model = Blog
         fields = ('title', 'body', 'cover_images')
         widgets = {
-            'title':forms.TextInput(attrs={'placeholder':'Your post title here...', 'size':'50'})
+            'title':forms.TextInput(attrs={'placeholder':'Your post title here...', 'size':'50'}),
         }
         
 
