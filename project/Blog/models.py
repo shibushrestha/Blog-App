@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from ckeditor.fields import RichTextField
-
+from django.utils.text import slugify
 
 
 class Blog(models.Model):
@@ -12,6 +12,7 @@ class Blog(models.Model):
     created_date_time = models.DateTimeField(auto_now_add=True)
     comments = models.TextField(max_length=1000, blank=True)
     likes = models.PositiveSmallIntegerField(blank=True, null=True)
+    slug = models.SlugField(blank=True, null=True)
     
     class Meta():
         
@@ -20,6 +21,9 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(to=get_user_model(), on_delete=models.CASCADE)

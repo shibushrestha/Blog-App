@@ -34,6 +34,9 @@ def user_login(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            # When you use login_required decorator the 'next' value is used to take the user to
+            # the next page after uccessful login, if there is no 'next' value, LOGIN_REDIRECT_URL is used 
+            # To get the value of 'next' do this, you can get the value of next in the template like so request.GET('next')
             if 'next' in request.POST:
                 return redirect(request.POST.get('next'))
             return redirect('home')
@@ -99,8 +102,8 @@ def create_blog(request):
     return render(request, 'Blog/create.html', {'form':form})
 
 
-def blog_detail(request, blog_id):
-    blog = get_object_or_404(Blog, pk=blog_id)
+def blog_detail(request, blog_slug):
+    blog = get_object_or_404(Blog, slug=blog_slug)
     context = {
         'blog':blog,
     }

@@ -5,6 +5,7 @@
     <form action="/Blog/login/" method="post" novalidate>
         {% csrf_token %}
         {% if request.GET.next %}
+            {# the 'next' value is used by login_required decorator to take user to the next page #}
             <input type="hidden" name="next" value="{{ request.GET.next }}">
         {% endif %}
 

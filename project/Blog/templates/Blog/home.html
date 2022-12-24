@@ -7,7 +7,7 @@
     {% if all_blog %}
     <div style="display: flex; justify-content: space-around; flex-direction: column; margin-top:auto 20px; width:900px">
         {% for blog in all_blog %}
-            <a href="/Blog/detail/{{blog.id}}/"><h3>{{ blog.title }}</h3></a>
+            <a href="/Blog/{{blog.slug}}/"><h3>{{ blog.title }}</h3></a>
             <p>{{ blog.created_date_time }}</p>
             <div>{{ blog.body|safe }}</div>
             <img src="{{ blog.cover_images.url }}" width="300px" height="500px" >
