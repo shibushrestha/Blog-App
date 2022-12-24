@@ -32,12 +32,10 @@ def create_blog(request):
             cover_images = form.cleaned_data.get('cover_images')
             
             blog = Blog.objects.create(user=user, title=title, body=body, cover_images=cover_images)
-            
-            #return redirect('')
+            # For now lets create the redirect url like this
+            return redirect('/Blog/blog_detail/' + blog.slug + "/")
 
-    return render(request, 'Blog/create.html', {'form':form})
-
-
+    return render(request, 'Blog/create.html', {'form':form,})
 
 
 
