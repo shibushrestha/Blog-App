@@ -8,7 +8,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-class Blog(models.Model):
+class BlogPost(models.Model):
     user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE)
     title = models.CharField(max_length=1000)
     body = RichTextField()
@@ -37,7 +37,7 @@ class Blog(models.Model):
             return "/static/Blog/images/default_blog_cover_image.webp"
         
     def get_absolute_url(self):
-        return reverse("Blog:detail", kwargs={"blog_slug": self.slug})
+        return reverse("Blog:detail", kwargs={"blogpost_slug": self.slug})
     
 
 
@@ -71,3 +71,9 @@ def user_profile_handler(sender, instance, created, **kwargs):
 
 
 post_save.connect(receiver=user_profile_handler, sender=User)
+
+
+
+# lets make a madel "Drafts" where user can save their post before publishing it to the Blog model where it acttually 
+# gets displayed for all the user
+

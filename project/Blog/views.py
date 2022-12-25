@@ -5,40 +5,64 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
-from .models import Blog, UserProfile
-from .forms import(UserRegisterForm, UserAuthenticationForm, CreateBlogForm, UpdateProfileForm)
+from .models import BlogPost, UserProfile
+from .forms import(UserRegisterForm, UserAuthenticationForm, CreateBlogPostForm, UpdateProfileForm)
 
+# The home view
 def home(request):
-    all_blog = get_list_or_404(Blog)
+    all_blog_post = get_list_or_404(BlogPost)
     context = {
-        'all_blog': all_blog
+        'all_blog_post': all_blog_post
     }
     return render(request, 'Blog/home.html', context)
 
-def blog_detail(request, blog_slug):
-    blog = get_object_or_404(Blog, slug=blog_slug)
+# Post Detail view
+def blog_post_detail(request, blog_slug):
+ 
+    blog_post = get_object_or_404(BlogPost, slug=blogpost_slug)
     context = {
-        'blog':blog,
+        'blog_post':blog_post,
     }
     return render(request, 'Blog/detail.html', context)
 
+# Create post view
 @login_required
-def create_blog(request):
-    form = CreateBlogForm()
+def create_blog_post(request):
+    form = CreateBlogPostForm()
     if request.method == "POST":
-        form = CreateBlogForm(request.POST, request.FILES)
+        form = CreateBlogPostForm(request.POST, request.FILES)
         if form.is_valid():
             user = request.user
             title = form.cleaned_data.get('title')
             body = form.cleaned_data.get('body')
             cover_images = form.cleaned_data.get('cover_images')
             
-            blog = Blog.objects.create(user=user, title=title, body=body, cover_images=cover_images)
+            blog_post = BlogPost.objects.create(user=user, title=title, body=body, cover_images=cover_images)
             # For now lets create the redirect url like this
-            return redirect('/Blog/blog_detail/' + blog.slug + "/")
+            return redirect('/Blog/blog_detail/' + blogpost.slug + "/")
 
     return render(request, 'Blog/create.html', {'form':form,})
 
+# Delete Post view
+# Anyone can delete any post, even if a user is not logged_in or anonymous, or even if its not theirs post
+# This is not certainly what we want
+# Need to achieve a functionality where only the user logged can delete the post and only if its theirs post
+@login_required
+def delete_post(request, blog_id):
+    blogpost = get_object_or_404(BlogPost, id = blogpost_id)
+    if blogpost.user == request.user:
+        blogpost.delete()
+        return redirect('Blog:home')
+    else:
+        return HttpResponse("<h1>You don't have permission to delete this post.</h1>")
+
+
+
+
+
+#########################################################################################
+    #######  ALL THE VIEWS RELATED TO USER AUTHENTICATION AND USER PROFILE  #########
+#########################################################################################
 
 
 def register_user(request):
@@ -52,7 +76,7 @@ def register_user(request):
             user = User(username=username)
             user.set_password(password)
             user.save()
-            return redirect('Blog:home')
+            return redirect('Blog:login')
     return render(request, 'Blog/register-user.html', context={'form':form})
 
 def user_login(request):
@@ -76,11 +100,29 @@ def user_logout(request):
     return redirect('Blog:home')
 
 
+# User profile view
+def user_profile(request, user_username):
+    try:
+        user = User.objects.get(username=user_username)
+    except ObjectDoesNotExist:
+        return HttpResponse('<h1>User doesnot exist</h1>')
+    if user == request.user:
+        user_profile = get_object_or_404(UserProfile, user=user)
+        user_all_blog = user.blogpost_set.all()
+        context ={
+            'user':user, 
+            'user_profile':user_profile,
+            'user_all_blog':user_all_blog,
+        }
+        return render(request, 'Blog/userprofile.html', context)
+    elif user != request.user and User.objects.filter(username=user.username).exists():
+        return redirect('Blog:login')
+
+# User profile update view
 def update_user_profile(request,user_username):
     user = User.objects.get(username=user_username)
     if user == request.user:
-        userprofile, created = UserProfile.objects.get_or_create(user=user)
-
+        userprofile = get_object_or_404(UserProfile, user=user)
         form = UpdateProfileForm(instance=userprofile)
         if request.method == "POST":
             form = UpdateProfileForm(request.POST, request.FILES, instance=userprofile)
@@ -102,22 +144,3 @@ def update_user_profile(request,user_username):
         return render(request, 'Blog/update_profile.html', {'form':form})
     else:
         return redirect("Blog:login")
-
-
-
-def user_profile(request, user_username):
-    try:
-        user = User.objects.get(username=user_username)
-    except ObjectDoesNotExist:
-        return HttpResponse('<h1>User doesnot exist</h1>')
-    if user == request.user:
-        user_profile = get_object_or_404(UserProfile, user=user)
-        user_all_blog = user.blog_set.all()
-        context ={
-            'user':user, 
-            'user_profile':user_profile,
-            'user_all_blog':user_all_blog,
-        }
-        return render(request, 'Blog/userprofile.html', context)
-    elif user != request.user and User.objects.filter(username=user.username).exists():
-        return redirect('Blog:login')

@@ -15,8 +15,11 @@
             <div>
                 <h1>{{ user_blog.title }}</h1>
                 <div>{{ user_blog.body| safe | truncatewords:50}}</div>
+                <a href="{% url 'Blog:delete_post' user_blog.id %}">Delete post</a>
             </div>
         {% endfor %}
+        
+        
     {% endif %}
 {% endblock content %}
 

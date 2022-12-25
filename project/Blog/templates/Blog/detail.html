@@ -1,10 +1,10 @@
 {% extends 'blog/main.html' %}
 {% block title %}Blog Detail{% endblock title %}Blog Detail
 {% block content %}
-    {% if blog %}
-        <h3>{{ blog.title }}</h3>
-        <div>{{ blog.body|safe }}</div>
-        <p>{{ blog.created_date_time }}</p>
+    {% if blogpost %}
+        <h3>{{ blogpost.title }}</h3>
+        <div>{{ blogpost.body|safe }}</div>
+        <p>{{ blogpost.created_date_time }}</p>
         <img src="{{ blog.get_cover_image_url }}" width="300px" height="500px">
     {% endif %}
 {% endblock content %}
