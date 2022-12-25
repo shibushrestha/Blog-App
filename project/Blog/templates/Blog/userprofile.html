@@ -5,6 +5,7 @@
         
         <img src="{{ user_profile.get_profile_image_url }}" style="width:100px; height:100px">
         <a href="{% url 'Blog:updateprofile' user.username %}">Update profile</a>
+        
         {{ user.username }}
         {{ user_profile.description }}
         {{ user_profile.youtube_account }}

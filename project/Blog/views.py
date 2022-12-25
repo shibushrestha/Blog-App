@@ -1,4 +1,6 @@
 from django.shortcuts import (render, redirect, get_object_or_404, get_list_or_404)
+from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -50,7 +52,7 @@ def register_user(request):
             user = User(username=username)
             user.set_password(password)
             user.save()
-            return redirect('home')
+            return redirect('Blog:home')
     return render(request, 'Blog/register-user.html', context={'form':form})
 
 def user_login(request):
@@ -65,47 +67,57 @@ def user_login(request):
             # To get the value of 'next' do this, you can get the value of next in the template like so request.GET('next')
             if 'next' in request.POST:
                 return redirect(request.POST.get('next'))
-            return redirect('home')
+            return redirect('Blog:home')
     return render(request, 'Blog/user-login.html', {'form':form})
 
 
 def user_logout(request):
     logout(request)
-    return redirect('home')
+    return redirect('Blog:home')
 
-@login_required
+
 def update_user_profile(request,user_username):
-    user = request.user
-    userprofile, created = UserProfile.objects.get_or_create(user=user)
+    user = User.objects.get(username=user_username)
+    if user == request.user:
+        userprofile, created = UserProfile.objects.get_or_create(user=user)
 
-    form = UpdateProfileForm(instance=userprofile)
-    if request.method == "POST":
-        form = UpdateProfileForm(request.POST, request.FILES, instance=userprofile)
-        if form.is_valid():
-            description = form.cleaned_data.get('description')
-            profile_image = form.cleaned_data.get('profile_image')
-            youtube_account = form.cleaned_data.get('youtube_account')
-            instagram_account = form.cleaned_data.get('instagram_account')
-            update_userprofile = UserProfile.objects.filter(user=user).update(
-                description = description,
-                profile_image = profile_image,
-                youtube_account = youtube_account,
-                instagram_account = instagram_account
-            )
+        form = UpdateProfileForm(instance=userprofile)
+        if request.method == "POST":
+            form = UpdateProfileForm(request.POST, request.FILES, instance=userprofile)
+            if form.is_valid():
+                description = form.cleaned_data.get('description')
+                profile_image = form.cleaned_data.get('profile_image')
+                youtube_account = form.cleaned_data.get('youtube_account')
+                instagram_account = form.cleaned_data.get('instagram_account')
+                update_userprofile = UserProfile.objects.filter(user=user).update(
+                    description = description,
+                    profile_image = profile_image,
+                    youtube_account = youtube_account,
+                    instagram_account = instagram_account
+                )
 
-            # for now lets redirect to home
-            return redirect('home')
-    return render(request, 'Blog/update_profile.html', {'form':form})
+                # for now lets redirect to home
+                return redirect('Blog:home')
+
+        return render(request, 'Blog/update_profile.html', {'form':form})
+    else:
+        return redirect("Blog:login")
 
 
-@login_required
+
 def user_profile(request, user_username):
-    user = get_object_or_404(User, username = user_username)
-    user_profile = get_object_or_404(UserProfile, user=user)
-    user_all_blog = user.blog_set.all()
-    context ={
-        'user':user, 
-        'user_profile':user_profile,
-        'user_all_blog':user_all_blog,
+    try:
+        user = User.objects.get(username=user_username)
+    except ObjectDoesNotExist:
+        return HttpResponse('<h1>User doesnot exist</h1>')
+    if user == request.user:
+        user_profile = get_object_or_404(UserProfile, user=user)
+        user_all_blog = user.blog_set.all()
+        context ={
+            'user':user, 
+            'user_profile':user_profile,
+            'user_all_blog':user_all_blog,
         }
-    return render(request, 'Blog/userprofile.html', context)
+        return render(request, 'Blog/userprofile.html', context)
+    elif user != request.user and User.objects.filter(username=user.username).exists():
+        return redirect('Blog:login')
