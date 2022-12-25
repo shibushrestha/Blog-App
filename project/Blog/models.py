@@ -1,8 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from ckeditor.fields import RichTextField
 from django.utils.text import slugify
 from django.urls import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Blog(models.Model):
@@ -56,4 +59,15 @@ class UserProfile(models.Model):
             return self.profile_image.url
         else:
             return "/static/Blog/images/default_profile_image.webp"
+    
+    def get_absolute_url(self):
+        return reverse("Blog:profile", kwargs={"user_username": self.user.username})
+    
 
+
+def user_profile_handler(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+
+post_save.connect(receiver=user_profile_handler, sender=User)
