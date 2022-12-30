@@ -5,29 +5,29 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
-from .models import BlogPost, UserProfile
+from .models import Post, UserProfile
 from .forms import(UserRegisterForm, UserAuthenticationForm, CreateBlogPostForm, UpdateProfileForm)
 
 # The home view
 def home(request):
-    all_blog_post = get_list_or_404(BlogPost)
+    all_post = get_list_or_404(Post)
     context = {
-        'all_blog_post': all_blog_post
+        'all_post': all_post
     }
     return render(request, 'Blog/home.html', context)
 
 # Post Detail view
-def blog_post_detail(request, blog_slug):
+def post_detail(request, post_slug):
  
-    blog_post = get_object_or_404(BlogPost, slug=blogpost_slug)
+    post = get_object_or_404(Post, slug=post_slug)
     context = {
-        'blog_post':blog_post,
+        'post': post,
     }
     return render(request, 'Blog/detail.html', context)
 
 # Create post view
 @login_required
-def create_blog_post(request):
+def create_post(request):
     form = CreateBlogPostForm()
     if request.method == "POST":
         form = CreateBlogPostForm(request.POST, request.FILES)
@@ -37,9 +37,9 @@ def create_blog_post(request):
             body = form.cleaned_data.get('body')
             cover_images = form.cleaned_data.get('cover_images')
             
-            blog_post = BlogPost.objects.create(user=user, title=title, body=body, cover_images=cover_images)
+            post = Post.objects.create(user=user, title=title, body=body, cover_images=cover_images)
             # For now lets create the redirect url like this
-            return redirect('/Blog/blog_detail/' + blogpost.slug + "/")
+            return redirect('/Blog/post_detail/' + post.slug + "/")
 
     return render(request, 'Blog/create.html', {'form':form,})
 
@@ -48,10 +48,10 @@ def create_blog_post(request):
 # This is not certainly what we want
 # Need to achieve a functionality where only the user logged can delete the post and only if its theirs post
 @login_required
-def delete_post(request, blog_id):
-    blogpost = get_object_or_404(BlogPost, id = blogpost_id)
-    if blogpost.user == request.user:
-        blogpost.delete()
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id = post_id)
+    if post.user == request.user:
+        post.delete()
         return redirect('Blog:home')
     else:
         return HttpResponse("<h1>You don't have permission to delete this post.</h1>")
@@ -108,11 +108,11 @@ def user_profile(request, user_username):
         return HttpResponse('<h1>User doesnot exist</h1>')
     if user == request.user:
         user_profile = get_object_or_404(UserProfile, user=user)
-        user_all_blog = user.blogpost_set.all()
+        user_all_post = user.post_set.all()
         context ={
             'user':user, 
             'user_profile':user_profile,
-            'user_all_blog':user_all_blog,
+            'user_all_post':user_all_post,
         }
         return render(request, 'Blog/userprofile.html', context)
     elif user != request.user and User.objects.filter(username=user.username).exists():

@@ -5,13 +5,13 @@
   <h1>You are at the home page</h1>
     <!--The main content.-->
     <!-- All blogs -->
-    {% if all_blog_post %}
+    {% if all_post %}
     <div style="display: flex; justify-content: space-around; flex-direction: column; margin-top:auto 20px; width:900px">
-        {% for blogpost in all_blog_post %}
-            <a href="{{ blog.get_absolute_url }}"><h3>{{ blogpost.title }}</h3></a>
-            <p>{{ blogpost.created_date_time }}</p>
-            <div>{{ blogpost.body|safe }}</div>
-            <img src="{{ blogpost.get_cover_image_url }}" width="300px" height="500px" >
+        {% for post in all_post %}
+            <a href="{{ post.get_absolute_url }}"><h3>{{ post.title }}</h3></a>
+            <p>{{ post.created_date_time }}</p>
+            <div>{{ post.body|safe }}</div>
+            <img src="{{ post.get_cover_image_url }}" width="300px" height="500px" >
         {% endfor %}
     </div>
 

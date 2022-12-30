@@ -8,7 +8,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-class BlogPost(models.Model):
+class Post(models.Model):
     user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE)
     title = models.CharField(max_length=1000)
     body = RichTextField()
@@ -37,7 +37,7 @@ class BlogPost(models.Model):
             return "/static/Blog/images/default_blog_cover_image.webp"
         
     def get_absolute_url(self):
-        return reverse("Blog:detail", kwargs={"blogpost_slug": self.slug})
+        return reverse("Blog:detail", kwargs={"post_slug": self.slug})
     
 
 
@@ -64,16 +64,37 @@ class UserProfile(models.Model):
         return reverse("Blog:profile", kwargs={"user_username": self.user.username})
     
 
-
+@receiver(post_save, sender=User)
 def user_profile_handler(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
 
-
-post_save.connect(receiver=user_profile_handler, sender=User)
 
 
 
 # lets make a madel "Drafts" where user can save their post before publishing it to the Blog model where it acttually 
 # gets displayed for all the user
 
+class DraftPost(models.Model):
+    user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE,)
+    title = models.CharField(max_length=1000)
+    body = RichTextField()
+    cover_images = models.ImageField(blank=True, null=True, upload_to="draft_images")
+    created_date_time = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta():
+        ordering = ['-created_date_time']
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def get_cover_image_url(self):
+        if self.cover_images and hasattr(self.cover_images, 'url'):
+            return self.cover_images.url
+        else:
+            return "/static/Blog/images/default_blog_cover_image.webp"
+        
+    def get_absolute_url(self):
+        return reverse("Blog:draft_post_detail", kwargs={"draftpost_slug": self.slug})

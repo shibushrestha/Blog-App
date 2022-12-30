@@ -1,13 +1,13 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-from .models import BlogPost, UserProfile
+from .models import Post, UserProfile
 
 
 class CreateBlogPostForm(forms.ModelForm):
     
     class Meta():
-        model = BlogPost
+        model = Post
         fields = ('title', 'body', 'cover_images')
         widgets = {
             'title':forms.TextInput(attrs={'placeholder':'Your post title here...', 'size':'50'}),
