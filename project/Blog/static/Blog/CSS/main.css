@@ -1,0 +1,33 @@
+*{
+    font-family: 'Roboto Medium', sans-serif;
+    font-weight: 100;
+    font-size: medium;
+}
+
+body{
+    background-color: rgba(  248, 251, 251 );
+}
+
+h1{
+    font-family: 'FreeSans', sans-serif;
+    font-weight: 300;
+    color: rgba(  23, 26, 33 );
+    
+}
+
+p{
+ color: rgba(  23, 26, 33 );
+}
+
+.p-title-link{
+    text-decoration: none;
+}
+
+.p-title-link > h1{
+    color: rgba(99, 82, 163);
+    
+}
+
+.p-title{
+    color: rgba(99, 82, 163);
+}

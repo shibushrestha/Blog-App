@@ -1,14 +1,14 @@
 {% extends 'Blog/main.html' %}
-{% block title %}Blog App{% endblock title %}Blog App
+{% block title %}Blog App{% endblock title %}
 {% block content %}
 
-  <h1>You are at the home page</h1>
+  
     <!--The main content.-->
     <!-- All blogs -->
     {% if all_post %}
     <div style="display: flex; justify-content: space-around; flex-direction: column; margin-top:auto 20px; width:900px">
         {% for post in all_post %}
-            <a href="{{ post.get_absolute_url }}"><h3>{{ post.title }}</h3></a>
+            <a class="p-title-link" href="{{ post.get_absolute_url }}"><h1 class="p-title">{{ post.title }}</h1></a>
             <p>{{ post.created_date_time }}</p>
             <div>{{ post.body|safe }}</div>
             <img src="{{ post.get_cover_image_url }}" width="300px" height="500px" >
