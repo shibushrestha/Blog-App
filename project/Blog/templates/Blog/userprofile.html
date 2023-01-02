@@ -15,9 +15,13 @@
             <div>
                 <h1>{{ user_post.title }}</h1>
                 <div>{{ user_post.body| safe | truncatewords:50}}</div>
-                <a href="{% url 'Blog:delete_post' user_post.id %}">Delete post</a>
             </div>
+            <form action="{% url 'Blog:delete_post' user_post.id %}" method="post" novalidate>
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
         {% endfor %}
+        
         
         
     {% endif %}

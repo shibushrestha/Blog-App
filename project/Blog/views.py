@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 
 from .models import Post, UserProfile
 from .forms import(UserRegisterForm, UserAuthenticationForm, CreateBlogPostForm, UpdateProfileForm)
@@ -48,6 +49,7 @@ def create_post(request):
 # This is not certainly what we want
 # Need to achieve a functionality where only the user logged can delete the post and only if its theirs post
 @login_required
+@require_http_methods(['POST'])
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id = post_id)
     if post.user == request.user:
@@ -63,6 +65,8 @@ def delete_post(request, post_id):
 #########################################################################################
     #######  ALL THE VIEWS RELATED TO USER AUTHENTICATION AND USER PROFILE  #########
 #########################################################################################
+
+
 
 
 def register_user(request):
@@ -119,7 +123,7 @@ def user_profile(request, user_username):
         return redirect('Blog:login')
 
 # User profile update view
-def update_user_profile(request,user_username):
+def update_user_profile(request, user_username):
     user = User.objects.get(username=user_username)
     if user == request.user:
         userprofile = get_object_or_404(UserProfile, user=user)
@@ -139,7 +143,7 @@ def update_user_profile(request,user_username):
                 )
 
                 # for now lets redirect to home
-                return redirect('Blog:home')
+                return redirect(userprofile)
 
         return render(request, 'Blog/update_profile.html', {'form':form})
     else:
