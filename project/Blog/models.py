@@ -14,7 +14,6 @@ class Post(models.Model):
     body = RichTextField()
     cover_images = models.ImageField(blank=True, null=True)
     created_date_time = models.DateTimeField(auto_now_add=True)
-    comments = models.TextField(max_length=1000, blank=True)
     likes = models.PositiveSmallIntegerField(blank=True, null=True)
     slug = models.SlugField(blank=True, null=True)
     
@@ -38,15 +37,25 @@ class Post(models.Model):
         
     def get_absolute_url(self):
         return reverse("Blog:detail", kwargs={"post_slug": self.slug})
-    
 
 
+# Discuss model
+# User can discuss about post
+class PostDiscussion(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ManyToManyField(to=get_user_model())
+    body = RichTextField()
+    discuss_date = models.DateTimeField(auto_now_add=True)
+
+
+# User Profile 
 class UserProfile(models.Model):
     user = models.OneToOneField(to=get_user_model(), on_delete=models.CASCADE)
     description = models.CharField(max_length=500, blank=True, null=True)
     profile_image = models.ImageField(upload_to='profile_image', blank=True, null=True)
     youtube_account = models.URLField(blank=True, null=True)
     instagram_account = models.URLField(blank=True, null=True)
+    # User followers and following needs a logic
     follower = models.ManyToManyField(to=get_user_model(),  related_name="user_follower", blank=True)
     following = models.ManyToManyField(to=get_user_model(), related_name="user_following", blank=True)
 
@@ -64,17 +73,15 @@ class UserProfile(models.Model):
         return reverse("Blog:profile", kwargs={"user_username": self.user.username})
     
 
+# A receiver function that listens to post_save signal and creates user profile when new user get registered 
 @receiver(post_save, sender=User)
 def user_profile_handler(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
 
 
-
-
 # lets make a madel "Drafts" where user can save their post before publishing it to the Blog model where it acttually 
 # gets displayed for all the user
-
 class DraftPost(models.Model):
     user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE,)
     title = models.CharField(max_length=1000)
