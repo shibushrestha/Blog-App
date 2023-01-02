@@ -1,15 +1,12 @@
 *{
-    font-family: 'Roboto Medium', sans-serif;
-    font-weight: 100;
-    font-size: medium;
+    box-sizing: border-box;
 }
 
 body{
     background-color: rgba(  248, 251, 251 );
 }
 
-h1{
-    font-family: 'FreeSans', sans-serif;
+h1, h2, h3{
     font-weight: 300;
     color: rgba(  23, 26, 33 );
     
