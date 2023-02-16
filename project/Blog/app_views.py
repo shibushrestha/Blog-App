@@ -23,7 +23,8 @@ def post_detail(request, post_slug):
 
 # Create post view
 @login_required
-def create_post(request):
+def create_post(request, user_username):
+   
     form = CreateBlogPostForm()
     if request.method == "POST":
         form = CreateBlogPostForm(request.POST, request.FILES)
