@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
     re_path(r'^Blog/', include('Blog.urls')),
-    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    re_path(r'^tinymce/', include('tinymce.urls')),
 ]
 
 if settings.DEBUG:
