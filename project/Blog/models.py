@@ -1,33 +1,36 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-from ckeditor.fields import RichTextField
 from django.utils.text import slugify
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+# This models holds the data for all the post the user are going to make inn the app
 class Post(models.Model):
     user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE)
     title = models.CharField(max_length=1000)
-    body = RichTextField()
+    # The body is a RichTextField which is imported from ckeditor
+    body = models.TextField()
     cover_images = models.ImageField(blank=True, null=True)
     created_date_time = models.DateTimeField(auto_now_add=True)
     likes = models.PositiveSmallIntegerField(blank=True, null=True)
     slug = models.SlugField(blank=True, null=True)
     
-    class Meta():
-        
+    class Meta():    
         ordering = ['-created_date_time']
 
     def __str__(self):
         return self.title
 
+    # Overrides the save method to auto populate the slug field by slugifying the title of the post
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+    # A property which returns the url of the cover image field of the post
+    # or returns the default path to the default cover image
     @property
     def get_cover_image_url(self):
         if self.cover_images and hasattr(self.cover_images, 'url'):
@@ -44,7 +47,7 @@ class Post(models.Model):
 class PostDiscussion(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ManyToManyField(to=get_user_model())
-    body = RichTextField()
+    body = models.TextField()
     discuss_date = models.DateTimeField(auto_now_add=True)
 
 
@@ -61,7 +64,9 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username + ' Profile'
-
+    
+    # A property which returns the url of the profile image of user
+    # or returns the default path to the default profile image
     @property
     def get_profile_image_url(self):
         if self.profile_image and hasattr(self.profile_image, 'url'):
@@ -80,12 +85,12 @@ def user_profile_handler(sender, instance, created, **kwargs):
         UserProfile.objects.create(user=instance)
 
 
-# lets make a madel "Drafts" where user can save their post before publishing it to the Blog model where it acttually 
+# lets make a model "Drafts" where user can save their post before publishing it to the Post model where it acttually 
 # gets displayed for all the user
 class DraftPost(models.Model):
     user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE,)
     title = models.CharField(max_length=1000)
-    body = RichTextField()
+    body = models.TextField
     cover_images = models.ImageField(blank=True, null=True, upload_to="draft_images")
     created_date_time = models.DateTimeField(auto_now_add=True)
 
