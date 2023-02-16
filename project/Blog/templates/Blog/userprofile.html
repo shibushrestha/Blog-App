@@ -1,5 +1,5 @@
 {% extends 'Blog/main.html' %}
-{% block title %}Profile{% endblock title %}
+{% block title %}{{ user.username|capfirst}}{% endblock title %}
 {% block content %}
     {% if user_profile %}
         
@@ -16,6 +16,7 @@
                 <h1>{{ user_post.title }}</h1>
                 <div>{{ user_post.body| safe | truncatewords:50}}</div>
             </div>
+            <!-- Post Delete -->
             <form action="{% url 'Blog:delete_post' user_post.id %}" method="post" novalidate>
                 {% csrf_token %}
                 <button type="submit">Delete</button>

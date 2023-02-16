@@ -1,19 +1,23 @@
 {% extends 'Blog/main.html' %}
-{% block title %}Blog App{% endblock title %}
+{% block title %}Blog App-teach, learn & grow{% endblock title %}
 {% block content %}
 
   
     <!--The main content.-->
     <!-- All blogs -->
     {% if all_post %}
-    <div style="display: flex; justify-content: space-around; flex-direction: column; margin-top:auto 20px; width:900px">
         {% for post in all_post %}
-            <a class="p-title-link" href="{{ post.get_absolute_url }}"><h1 class="p-title">{{ post.title }}</h1></a>
-            <p>{{ post.created_date_time }}</p>
-            <div>{{ post.body|safe }}</div>
-            <img src="{{ post.get_cover_image_url }}" width="300px" height="500px" >
+            <div class="container container-lg mt-3 mb-3 p-3" style="border: 1px solid black">
+                <a class="p-title-link" href="{{ post.get_absolute_url }}"><h3 class="p-title">{{ post.title }}</h3></a>
+                <p>{{ post.created_date_time }}</p>
+                <div>{{ post.body|safe|truncatewords:100}}</div>
+                
+                {% comment %}
+                    <img src="{{ post.get_cover_image_url }}" width="300px" height="500px" >
+                {% endcomment %}
+                <a href="{{post.get_absolute_url }}"> continue reading</a>
+            </div>    
         {% endfor %}
-    </div>
 
     {% endif %}
 

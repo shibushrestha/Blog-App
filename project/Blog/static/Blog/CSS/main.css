@@ -8,8 +8,20 @@ body{
 
 h1, h2, h3{
     font-weight: 300;
-    color: rgba(  23, 26, 33 );
+    color: rgba(23, 26, 33 );
     
+}
+
+.nav-link{
+    color: rgba(248, 251, 251 );
+
+}
+.nav-link:active{
+    color:bisque;
+}
+
+.navbar-brand:hover, .nav-link:hover{
+    color: bisque;
 }
 
 p{
@@ -27,4 +39,43 @@ p{
 
 .p-title{
     color: rgba(99, 82, 163);
+}
+
+.search-post{
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: groove;
+    border-radius: 0;
+    background-color: #212529;
+    color: rgba(  248, 251, 251 );
+}
+.search-post:focus {
+    box-shadow: none; 
+    background-color: #212529;
+    color: rgba(  248, 251, 251 );
+}
+
+.post-title{
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: groove;
+    background-color: rgba(  248, 251, 251 );
+    font-size: 20px;
+}
+
+.no-outline:focus {
+    outline: none;
+}
+
+.search-post::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgba(248, 251, 251, 0.7);
+    opacity: 1; /* Firefox */
+  }
+
+
+.register-form, .login-form{
+    border-radius: 3px;
+    background-color: rgba(23, 26, 33);
 }

@@ -1,15 +1,15 @@
 {% extends 'Blog/main.html' %}
 {% block title %}Post blog{% endblock title %}Post blog
 {% block content %}
-    <div style="display: flex; justify-content: center; margin-top:20px">
-        <form action='{% url "Blog:create" %}' method="post" enctype="multipart/form-data" novalidate>
-            {% csrf_token %}
-            {{ form.title }}<br><br>
-            {{ form.cover_images }}<br><br>
-            {{ form.body }}
-            {{ form.media }}<br>
-            <input type="submit" value="post">
-        </form><br>
-        <a href="#"><button>Save as draft</button></a>
+    <div class="container container-lg mt-5">
+            <form action='{% url "Blog:create" user.username %}' method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                {{ form.title }}<br><br>
+                {{ form.cover_images }}<br><br>
+                {{ form.body }}
+                <br>
+                <button class="btn btn-success" type="submit">Post</button>
+            </form><br>
+            <a class="btn btn-warning" href="#">Save as draft</a>
     </div>
 {% endblock content %}
