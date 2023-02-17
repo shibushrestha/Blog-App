@@ -6,76 +6,54 @@ body{
     background-color: rgba(  248, 251, 251 );
 }
 
-h1, h2, h3{
-    font-weight: 300;
-    color: rgba(23, 26, 33 );
-    
+/* Style the navbar */
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Merriweather", sans-serif;
+	font-size: large;
+	font-weight:200;
 }
 
-.nav-link{
-    color: rgba(248, 251, 251 );
-
-}
-.nav-link:active{
-    color:bisque;
-}
-
-.navbar-brand:hover, .nav-link:hover{
-    color: bisque;
-}
-
-p{
- color: rgba(  23, 26, 33 );
+.navbar {
+	overflow: hidden;
+	background-color: rgb(28,172,139, 0.98);
+	height: 10vh;
+	display: flex;
+	align-items: center;
+	position: sticky;
+	top: 0;
+	z-index: 1;
 }
 
-.p-title-link{
-    text-decoration: none;
+.navbar > .brand-logo{
+	max-height: inherit;
 }
 
-.p-title-link > h1{
-    color: rgba(99, 82, 163);
-    
+.navbar-content{
+	max-width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-grow: 1;
 }
 
-.p-title{
-    color: rgba(99, 82, 163);
+
+/* Navbar links */
+.nav-links a {
+	float: left;
+	display: block;
+	color: rgb(206, 228, 221);
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
 }
 
-.search-post{
-    border-top-style: hidden;
-    border-right-style: hidden;
-    border-left-style: hidden;
-    border-bottom-style: groove;
-    border-radius: 0;
-    background-color: #212529;
-    color: rgba(  248, 251, 251 );
-}
-.search-post:focus {
-    box-shadow: none; 
-    background-color: #212529;
-    color: rgba(  248, 251, 251 );
+.nav-links a:hover{
+	color: rgb(232, 245, 241);
 }
 
-.post-title{
-    border-top-style: hidden;
-    border-right-style: hidden;
-    border-left-style: hidden;
-    border-bottom-style: groove;
-    background-color: rgba(  248, 251, 251 );
-    font-size: 20px;
-}
-
-.no-outline:focus {
-    outline: none;
-}
-
-.search-post::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: rgba(248, 251, 251, 0.7);
-    opacity: 1; /* Firefox */
-  }
-
-
-.register-form, .login-form{
-    border-radius: 3px;
-    background-color: rgba(23, 26, 33);
+.nav-links .active{
+	color: rgba(250,166,1)
 }

@@ -1,28 +1,31 @@
 {% extends 'Blog/main.html' %}
 {% block title %}Login{% endblock title %}
+
 {% block content %}
 
-    <div class="container-sm">
-        
-        <div class="d-md-flex flex-column justify-content-center p-2 mt-5 login-form">
-            <div class="mb-3"><h3 style="color: rgba(  248, 251, 251 );">Login Form</h3></div>
+    <div>
+        <div>
+            <div><h3>Login Form</h3></div>
+
             <form action="{% url 'Blog:login' %}" method="post" novalidate>
                 {% csrf_token %}
                 {% if request.GET.next %}
                     {# the 'next' value is used by login_required decorator to take user to the next page #}
                     <input type="hidden" name="next" value="{{ request.GET.next }}">
                 {% endif %}
-                <div class="mb-3">
+                <div>
                     {{ form.username }} 
                 </div>
-                <div class="mb-3">
+                <div>
                     {{ form.password }}
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
             <form>
-            <div class="mt-3 mb-3">
-                <p style="color: rgba(  248, 251, 251 );">Don't have an account? <a style="text-decoration: none" href="{% url 'Blog:register' %}">Register</a></p>
-            </div>    
+
+            <div>
+                <p>Don't have an account? <a href="{% url 'Blog:register' %}">Register</a></p>
+            </div>  
+             
         </div>
     </div>
 

@@ -3,9 +3,9 @@
 
 
 {% block content %}
-    <div class="container container-lg">
+    <div>
         {% if post %}
-            <h1 class="p-title">{{ post.title }}</h1>
+            <h1>{{ post.title }}</h1>
             <div>{{ post.body|safe }}</div>
             <p>{{ post.created_date_time }}</p>
             <img src="{{ post.get_cover_image_url }}" width="300px" height="500px">
